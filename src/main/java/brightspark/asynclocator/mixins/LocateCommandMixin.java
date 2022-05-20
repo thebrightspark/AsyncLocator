@@ -2,11 +2,14 @@ package brightspark.asynclocator.mixins;
 
 import brightspark.asynclocator.AsyncLocatorMod;
 import brightspark.asynclocator.logic.LocateCommandLogic;
+import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.commands.LocateCommand;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,8 +29,11 @@ public class LocateCommandMixin {
 		locals = LocalCapture.CAPTURE_FAILSOFT
 	)
 	private static void findLocationAsync(CommandSourceStack sourceStack, ResourceOrTagLocationArgument.Result<ConfiguredStructureFeature<?, ?>> argResult, CallbackInfoReturnable<Integer> cir, Registry<ConfiguredStructureFeature<?, ?>> registry, HolderSet<ConfiguredStructureFeature<?, ?>> holderset) {
-		AsyncLocatorMod.logDebug("Intercepted LocateCommand#locate call");
-		LocateCommandLogic.locateAsync(sourceStack, argResult, holderset);
-		cir.setReturnValue(0);
+		CommandSource source = ((CommandSourceStackAccess) sourceStack).getSource();
+		if (source instanceof ServerPlayer || source instanceof MinecraftServer) {
+			AsyncLocatorMod.logDebug("Intercepted LocateCommand#locate call");
+			LocateCommandLogic.locateAsync(sourceStack, argResult, holderset);
+			cir.setReturnValue(0);
+		}
 	}
 }

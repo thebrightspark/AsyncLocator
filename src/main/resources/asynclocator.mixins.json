@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "asynclocator.refmap.json",
 	"mixins": [
+		"CommandSourceStackAccess",
 		"DolphinSwimToTreasureGoalMixin",
 		"EnderEyeItemMixin",
 		"EyeOfEnderAccess",
