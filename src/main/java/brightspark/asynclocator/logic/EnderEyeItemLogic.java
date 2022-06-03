@@ -15,7 +15,7 @@ import net.minecraft.world.item.EnderEyeItem;
 public class EnderEyeItemLogic {
 	private EnderEyeItemLogic() {}
 
-	public static void startAsyncLocateTask(ServerLevel level, Player player, EyeOfEnder eyeOfEnder, EnderEyeItem enderEyeItem) {
+	public static void locateAsync(ServerLevel level, Player player, EyeOfEnder eyeOfEnder, EnderEyeItem enderEyeItem) {
 		AsyncLocator.locate(
 			level,
 			ConfiguredStructureTags.EYE_OF_ENDER_LOCATED,
@@ -32,7 +32,7 @@ public class EnderEyeItemLogic {
 			} else {
 				AsyncLocatorMod.logInfo("No location found - killing eye of ender entity");
 				// Set the entity's life to long enough that it dies
-				((EyeOfEnderAccess) eyeOfEnder).setLife(100);
+				((EyeOfEnderAccess) eyeOfEnder).setLife(Integer.MAX_VALUE - 100);
 			}
 		});
 		((EyeOfEnderData) eyeOfEnder).setLocateTaskOngoing(true);

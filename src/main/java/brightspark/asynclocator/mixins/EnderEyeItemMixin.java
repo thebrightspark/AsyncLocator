@@ -37,7 +37,13 @@ public class EnderEyeItemMixin {
 			target = "Lnet/minecraft/server/level/ServerLevel;findNearestMapFeature(Lnet/minecraft/tags/TagKey;Lnet/minecraft/core/BlockPos;IZ)Lnet/minecraft/core/BlockPos;"
 		)
 	)
-	public BlockPos levelFindNearestMapFeature(ServerLevel serverlevel, TagKey<ConfiguredStructureFeature<?, ?>> pStructureTag, BlockPos pPos, int pRadius, boolean pSkipExistingChunks) {
+	public BlockPos levelFindNearestMapFeature(
+		ServerLevel serverlevel,
+		TagKey<ConfiguredStructureFeature<?, ?>> pStructureTag,
+		BlockPos pPos,
+		int pRadius,
+		boolean pSkipExistingChunks
+	) {
 		AsyncLocatorMod.logDebug("Intercepted EnderEyeItem#use call");
 		return BlockPos.ZERO;
 	}
@@ -51,8 +57,18 @@ public class EnderEyeItemMixin {
 		),
 		locals = LocalCapture.CAPTURE_FAILEXCEPTION
 	)
-	public void startAsyncLocateTask(Level pLevel, Player pPlayer, InteractionHand pHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir, ItemStack itemstack, HitResult hitresult, ServerLevel serverlevel, BlockPos blockpos, EyeOfEnder eyeofender) {
-		EnderEyeItemLogic.startAsyncLocateTask(serverlevel, pPlayer, eyeofender, (EnderEyeItem) (Object) this);
+	public void startAsyncLocateTask(
+		Level pLevel,
+		Player pPlayer,
+		InteractionHand pHand,
+		CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir,
+		ItemStack itemstack,
+		HitResult hitresult,
+		ServerLevel serverlevel,
+		BlockPos blockpos,
+		EyeOfEnder eyeofender
+	) {
+		EnderEyeItemLogic.locateAsync(serverlevel, pPlayer, eyeofender, (EnderEyeItem) (Object) this);
 	}
 
 	@Redirect(

@@ -50,11 +50,11 @@ public class AsyncLocator {
 		}
 	}
 
-	public static void handleServerAboutToStartEvent(ServerAboutToStartEvent ignoredEvent) {
+	static void handleServerAboutToStartEvent(ServerAboutToStartEvent ignoredEvent) {
 		setupExecutorService();
 	}
 
-	public static void handleServerStoppingEvent(ServerStoppingEvent ignoredEvent) {
+	static void handleServerStoppingEvent(ServerStoppingEvent ignoredEvent) {
 		shutdownExecutorService();
 	}
 
