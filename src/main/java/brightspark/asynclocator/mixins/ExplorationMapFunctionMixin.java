@@ -47,7 +47,8 @@ public class ExplorationMapFunctionMixin {
 			value = "INVOKE",
 			target = "Lnet/minecraft/server/level/ServerLevel;findNearestMapFeature(Lnet/minecraft/tags/TagKey;Lnet/minecraft/core/BlockPos;IZ)Lnet/minecraft/core/BlockPos;"
 		),
-		locals = LocalCapture.CAPTURE_FAILSOFT
+		locals = LocalCapture.CAPTURE_FAILSOFT,
+		cancellable = true
 	)
 	public void updateMapAsync(
 		ItemStack pStack,
