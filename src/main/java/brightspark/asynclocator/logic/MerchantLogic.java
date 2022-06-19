@@ -3,7 +3,6 @@ package brightspark.asynclocator.logic;
 import brightspark.asynclocator.AsyncLocator;
 import brightspark.asynclocator.AsyncLocatorConfig;
 import brightspark.asynclocator.AsyncLocatorMod;
-import brightspark.asynclocator.mixins.MapItemAccess;
 import brightspark.asynclocator.mixins.MerchantOfferAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
@@ -16,19 +15,19 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
-import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 
 public class MerchantLogic {
 	private MerchantLogic() {}
 
+	/**
+	 * @deprecated Use {@link CommonLogic#createEmptyMap()} instead
+	 */
+	@Deprecated(since = "1.1.0", forRemoval = true)
 	public static ItemStack createEmptyMap() {
-		ItemStack stack = new ItemStack(Items.FILLED_MAP);
-		stack.setHoverName(new TranslatableComponent("asynclocator.map.locating"));
-		return stack;
+		return CommonLogic.createEmptyMap();
 	}
 
 	public static void invalidateMap(AbstractVillager merchant, ItemStack mapStack) {
@@ -54,6 +53,10 @@ public class MerchantLogic {
 		}
 	}
 
+	/**
+	 * @deprecated Use {@link CommonLogic#updateMap(ItemStack, ServerLevel, BlockPos, int, MapDecoration.Type, String)} instead
+	 */
+	@Deprecated(since = "1.1.0", forRemoval = true)
 	public static void updateMap(
 		ItemStack mapStack,
 		ServerLevel level,
@@ -61,19 +64,7 @@ public class MerchantLogic {
 		String displayName,
 		MapDecoration.Type destinationType
 	) {
-		MapItemAccess.callCreateAndStoreSavedData(
-			mapStack,
-			level,
-			pos.getX(),
-			pos.getZ(),
-			2,
-			true,
-			true,
-			level.dimension()
-		);
-		MapItem.renderBiomePreviewMap(level, mapStack);
-		MapItemSavedData.addTargetDecoration(mapStack, pos, "+", destinationType);
-		mapStack.setHoverName(new TranslatableComponent(displayName));
+		CommonLogic.updateMap(mapStack, level, pos, 2, destinationType, displayName);
 	}
 
 	public static void handleLocationFound(
@@ -91,7 +82,7 @@ public class MerchantLogic {
 		} else {
 			AsyncLocatorMod.logInfo("Location found - updating treasure map in merchant offer");
 
-			updateMap(mapStack, level, pos, displayName, destinationType);
+			CommonLogic.updateMap(mapStack, level, pos, 2, destinationType, displayName);
 		}
 
 		if (merchant.getTradingPlayer() instanceof ServerPlayer tradingPlayer) {
@@ -164,7 +155,7 @@ public class MerchantLogic {
 		Entity trader, int emeraldCost, int maxUses, int villagerXp, MapUpdateTask task
 	) {
 		if (trader instanceof AbstractVillager merchant) {
-			ItemStack mapStack = createEmptyMap();
+			ItemStack mapStack = CommonLogic.createEmptyMap();
 			task.apply((ServerLevel) trader.level, merchant, mapStack);
 
 			return new MerchantOffer(

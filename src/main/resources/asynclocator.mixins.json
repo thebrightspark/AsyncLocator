@@ -7,6 +7,7 @@
 		"CommandSourceStackAccess",
 		"DolphinSwimToTreasureGoalMixin",
 		"EnderEyeItemMixin",
+		"ExplorationMapFunctionMixin",
 		"EyeOfEnderAccess",
 		"EyeOfEnderMixin",
 		"LocateCommandAccess",
