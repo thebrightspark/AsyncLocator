@@ -70,7 +70,8 @@ public class CommonLogic {
 		);
 		MapItem.renderBiomePreviewMap(level, mapStack);
 		MapItemSavedData.addTargetDecoration(mapStack, pos, "+", destinationType);
-		mapStack.setHoverName(displayName != null ? new TranslatableComponent(displayName) : null);
+		if (displayName != null)
+			mapStack.setHoverName(new TranslatableComponent(displayName));
 	}
 
 	/**
