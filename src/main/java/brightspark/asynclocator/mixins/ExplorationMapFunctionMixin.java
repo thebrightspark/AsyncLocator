@@ -58,11 +58,8 @@ public class ExplorationMapFunctionMixin {
 		ServerLevel serverlevel
 	) {
 		AsyncLocatorMod.logDebug("Intercepted ExplorationMapFunction#run call");
-		// TODO: For some reason the zoom/scale is wrong for this...
-		//  Vanilla generates the map with 1:2 (Level 1/4)
-		//  My code generated it with 1:16 (Level 4/4)
 		ItemStack mapStack = ExplorationMapFunctionLogic.updateMapAsync(
-			serverlevel, new BlockPos(vec3), searchRadius, zoom, skipKnownStructures, mapDecoration, destination
+			serverlevel, new BlockPos(vec3), zoom, searchRadius, skipKnownStructures, mapDecoration, destination
 		);
 		cir.setReturnValue(mapStack);
 	}
