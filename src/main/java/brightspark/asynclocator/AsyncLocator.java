@@ -14,6 +14,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.NumberFormat;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -115,11 +116,13 @@ public class AsyncLocator {
 			"Trying to locate {} in {} around {} within {} chunks",
 			structureTag, level, pos, searchRadius
 		);
+		long start = System.nanoTime();
 		BlockPos foundPos = level.findNearestMapStructure(structureTag, pos, searchRadius, skipExistingChunks);
+		String time = NumberFormat.getNumberInstance().format(TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
 		if (foundPos == null)
-			AsyncLocatorMod.logInfo("No {} found", structureTag);
+			AsyncLocatorMod.logInfo("No {} found (took {}ms)", structureTag, time);
 		else
-			AsyncLocatorMod.logInfo("Found {} at {}", structureTag, foundPos);
+			AsyncLocatorMod.logInfo("Found {} at {} (took {}ms)", structureTag, foundPos, time);
 		completableFuture.complete(foundPos);
 	}
 
@@ -135,12 +138,16 @@ public class AsyncLocator {
 			"Trying to locate {} in {} around {} within {} chunks",
 			structureSet, level, pos, searchRadius
 		);
+		long start = System.nanoTime();
 		Pair<BlockPos, Holder<Structure>> foundPair = level.getChunkSource().getGenerator()
 			.findNearestMapStructure(level, structureSet, pos, searchRadius, skipExistingChunks);
+		String time = NumberFormat.getNumberInstance().format(TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
 		if (foundPair == null)
-			AsyncLocatorMod.logInfo("No {} found", structureSet);
+			AsyncLocatorMod.logInfo("No {} found (took {}ms)", structureSet, time);
 		else
-			AsyncLocatorMod.logInfo("Found {} at {}", foundPair.getSecond().value(), foundPair.getFirst());
+			AsyncLocatorMod.logInfo("Found {} at {} (took {}ms)",
+				foundPair.getSecond().value().getClass().getSimpleName(), foundPair.getFirst(), time
+			);
 		completableFuture.complete(foundPair);
 	}
 
