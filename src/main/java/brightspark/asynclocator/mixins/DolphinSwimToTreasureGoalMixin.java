@@ -5,7 +5,7 @@ import brightspark.asynclocator.AsyncLocator.LocateTask;
 import brightspark.asynclocator.AsyncLocatorMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.ConfiguredStructureTags;
+import net.minecraft.tags.StructureTags;
 import net.minecraft.world.entity.animal.Dolphin;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,7 +35,7 @@ public class DolphinSwimToTreasureGoalMixin {
 		method = "start",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/server/level/ServerLevel;findNearestMapFeature(Lnet/minecraft/tags/TagKey;Lnet/minecraft/core/BlockPos;IZ)Lnet/minecraft/core/BlockPos;"
+			target = "Lnet/minecraft/server/level/ServerLevel;findNearestMapStructure(Lnet/minecraft/tags/TagKey;Lnet/minecraft/core/BlockPos;IZ)Lnet/minecraft/core/BlockPos;"
 		),
 		cancellable = true,
 		locals = LocalCapture.CAPTURE_FAILSOFT
@@ -91,7 +91,7 @@ public class DolphinSwimToTreasureGoalMixin {
 	}
 
 	private void handleFindTreasureAsync(ServerLevel level, BlockPos blockPos) {
-		locateTask = AsyncLocator.locate(level, ConfiguredStructureTags.DOLPHIN_LOCATED, blockPos, 50, false)
+		locateTask = AsyncLocator.locate(level, StructureTags.DOLPHIN_LOCATED, blockPos, 50, false)
 			.thenOnServerThread(pos -> handleLocationFound(level, pos));
 	}
 

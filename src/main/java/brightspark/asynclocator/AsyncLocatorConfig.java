@@ -9,6 +9,7 @@ public class AsyncLocatorConfig {
 
 	public static ConfigValue<Integer> LOCATOR_THREADS;
 	public static ConfigValue<Boolean> REMOVE_OFFER;
+	// TODO: Add configs to enable/disable each async feature separately
 
 	static {
 		SPEC = new Builder()

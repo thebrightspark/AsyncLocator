@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -101,7 +101,7 @@ public class ExplorationMapFunctionLogic {
 		int searchRadius,
 		boolean skipKnownStructures,
 		MapDecoration.Type destinationType,
-		TagKey<ConfiguredStructureFeature<?, ?>> destination
+		TagKey<Structure> destination
 	) {
 		ItemStack mapStack = CommonLogic.createEmptyMap();
 		AsyncLocator.locate(level, destination, blockPos, searchRadius, skipKnownStructures)

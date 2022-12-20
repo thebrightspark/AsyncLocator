@@ -7,7 +7,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.ConfiguredStructureTags;
+import net.minecraft.tags.StructureTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.EyeOfEnder;
 import net.minecraft.world.item.EnderEyeItem;
@@ -18,7 +18,7 @@ public class EnderEyeItemLogic {
 	public static void locateAsync(ServerLevel level, Player player, EyeOfEnder eyeOfEnder, EnderEyeItem enderEyeItem) {
 		AsyncLocator.locate(
 			level,
-			ConfiguredStructureTags.EYE_OF_ENDER_LOCATED,
+			StructureTags.EYE_OF_ENDER_LOCATED,
 			player.blockPosition(),
 			100,
 			false

@@ -8,7 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
@@ -59,12 +59,12 @@ public class AsyncLocator {
 	}
 
 	/**
-	 * Queues a task to locate a feature using {@link ServerLevel#findNearestMapFeature(TagKey, BlockPos, int, boolean)}
+	 * Queues a task to locate a feature using {@link ServerLevel#findNearestMapStructure(TagKey, BlockPos, int, boolean)}
 	 * and returns a {@link LocateTask} with the futures for it.
 	 */
 	public static LocateTask<BlockPos> locate(
 		ServerLevel level,
-		TagKey<ConfiguredStructureFeature<?, ?>> structureTag,
+		TagKey<Structure> structureTag,
 		BlockPos pos,
 		int searchRadius,
 		boolean skipKnownStructures
@@ -82,12 +82,12 @@ public class AsyncLocator {
 
 	/**
 	 * Queues a task to locate a feature using
-	 * {@link ChunkGenerator#findNearestMapFeature(ServerLevel, HolderSet, BlockPos, int, boolean)} and returns a
+	 * {@link ChunkGenerator#findNearestMapStructure(ServerLevel, HolderSet, BlockPos, int, boolean)} and returns a
 	 * {@link LocateTask} with the futures for it.
 	 */
-	public static LocateTask<Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>>> locate(
+	public static LocateTask<Pair<BlockPos, Holder<Structure>>> locate(
 		ServerLevel level,
-		HolderSet<ConfiguredStructureFeature<?, ?>> structureSet,
+		HolderSet<Structure> structureSet,
 		BlockPos pos,
 		int searchRadius,
 		boolean skipKnownStructures
@@ -96,7 +96,7 @@ public class AsyncLocator {
 			"Creating locate task for {} in {} around {} within {} chunks",
 			structureSet, level, pos, searchRadius
 		);
-		CompletableFuture<Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>>> completableFuture = new CompletableFuture<>();
+		CompletableFuture<Pair<BlockPos, Holder<Structure>>> completableFuture = new CompletableFuture<>();
 		Future<?> future = LOCATING_EXECUTOR_SERVICE.submit(
 			() -> doLocateChunkGenerator(completableFuture, level, structureSet, pos, searchRadius, skipKnownStructures)
 		);
@@ -106,7 +106,7 @@ public class AsyncLocator {
 	private static void doLocateLevel(
 		CompletableFuture<BlockPos> completableFuture,
 		ServerLevel level,
-		TagKey<ConfiguredStructureFeature<?, ?>> structureTag,
+		TagKey<Structure> structureTag,
 		BlockPos pos,
 		int searchRadius,
 		boolean skipExistingChunks
@@ -115,7 +115,7 @@ public class AsyncLocator {
 			"Trying to locate {} in {} around {} within {} chunks",
 			structureTag, level, pos, searchRadius
 		);
-		BlockPos foundPos = level.findNearestMapFeature(structureTag, pos, searchRadius, skipExistingChunks);
+		BlockPos foundPos = level.findNearestMapStructure(structureTag, pos, searchRadius, skipExistingChunks);
 		if (foundPos == null)
 			AsyncLocatorMod.logInfo("No {} found", structureTag);
 		else
@@ -124,9 +124,9 @@ public class AsyncLocator {
 	}
 
 	private static void doLocateChunkGenerator(
-		CompletableFuture<Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>>> completableFuture,
+		CompletableFuture<Pair<BlockPos, Holder<Structure>>> completableFuture,
 		ServerLevel level,
-		HolderSet<ConfiguredStructureFeature<?, ?>> structureSet,
+		HolderSet<Structure> structureSet,
 		BlockPos pos,
 		int searchRadius,
 		boolean skipExistingChunks
@@ -135,8 +135,8 @@ public class AsyncLocator {
 			"Trying to locate {} in {} around {} within {} chunks",
 			structureSet, level, pos, searchRadius
 		);
-		Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>> foundPair = level.getChunkSource().getGenerator()
-			.findNearestMapFeature(level, structureSet, pos, searchRadius, skipExistingChunks);
+		Pair<BlockPos, Holder<Structure>> foundPair = level.getChunkSource().getGenerator()
+			.findNearestMapStructure(level, structureSet, pos, searchRadius, skipExistingChunks);
 		if (foundPair == null)
 			AsyncLocatorMod.logInfo("No {} found", structureSet);
 		else
@@ -147,7 +147,7 @@ public class AsyncLocator {
 	/**
 	 * Holder of the futures for an async locate task as well as providing some helper functions.
 	 * The completableFuture will be completed once the call to
-	 * {@link ServerLevel#findNearestMapFeature(TagKey, BlockPos, int, boolean)} has completed, and will hold the
+	 * {@link ServerLevel#findNearestMapStructure(TagKey, BlockPos, int, boolean)} has completed, and will hold the
 	 * result of it.
 	 * The taskFuture is the future for the {@link Runnable} itself in the executor service.
 	 */

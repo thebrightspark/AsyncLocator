@@ -2,7 +2,7 @@ package brightspark.asynclocator.logic;
 
 import brightspark.asynclocator.mixins.MapItemAccess;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -24,7 +24,7 @@ public class CommonLogic {
 	 */
 	public static ItemStack createEmptyMap() {
 		ItemStack stack = new ItemStack(Items.FILLED_MAP);
-		stack.setHoverName(new TranslatableComponent("asynclocator.map.locating"));
+		stack.setHoverName(Component.translatable("asynclocator.map.locating"));
 		return stack;
 	}
 
@@ -71,7 +71,7 @@ public class CommonLogic {
 		MapItem.renderBiomePreviewMap(level, mapStack);
 		MapItemSavedData.addTargetDecoration(mapStack, pos, "+", destinationType);
 		if (displayName != null)
-			mapStack.setHoverName(new TranslatableComponent(displayName));
+			mapStack.setHoverName(Component.translatable(displayName));
 	}
 
 	/**

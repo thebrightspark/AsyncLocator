@@ -6,7 +6,7 @@ import brightspark.asynclocator.AsyncLocatorMod;
 import brightspark.asynclocator.mixins.MerchantOfferAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -16,7 +16,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 
 public class MerchantLogic {
@@ -31,7 +31,7 @@ public class MerchantLogic {
 	}
 
 	public static void invalidateMap(AbstractVillager merchant, ItemStack mapStack) {
-		mapStack.setHoverName(new TranslatableComponent("asynclocator.map.none"));
+		mapStack.setHoverName(Component.translatable("asynclocator.map.none"));
 		merchant.getOffers()
 			.stream()
 			.filter(offer -> offer.getResult() == mapStack)
@@ -106,7 +106,7 @@ public class MerchantLogic {
 		MapDecoration.Type destinationType,
 		int maxUses,
 		int villagerXp,
-		TagKey<ConfiguredStructureFeature<?, ?>> destination
+		TagKey<Structure> destination
 	) {
 		return updateMapAsyncInternal(
 			pTrader,
@@ -132,7 +132,7 @@ public class MerchantLogic {
 		MapDecoration.Type destinationType,
 		int maxUses,
 		int villagerXp,
-		HolderSet<ConfiguredStructureFeature<?, ?>> structureSet
+		HolderSet<Structure> structureSet
 	) {
 		return updateMapAsyncInternal(
 			pTrader,

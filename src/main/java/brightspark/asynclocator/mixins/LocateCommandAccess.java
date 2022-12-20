@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(LocateCommand.class)
 public interface LocateCommandAccess {
-	@Accessor("ERROR_FAILED")
+	@Accessor("ERROR_STRUCTURE_NOT_FOUND")
 	static DynamicCommandExceptionType getErrorFailed() {
 		throw new UnsupportedOperationException();
 	}

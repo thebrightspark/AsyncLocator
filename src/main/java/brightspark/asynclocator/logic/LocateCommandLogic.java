@@ -7,27 +7,36 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.commands.LocateCommand;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class LocateCommandLogic {
 	private LocateCommandLogic() {}
 
-	public static void locateAsync(CommandSourceStack sourceStack, ResourceOrTagLocationArgument.Result<ConfiguredStructureFeature<?, ?>> argResult, HolderSet<ConfiguredStructureFeature<?, ?>> holderset) {
+	public static void locateAsync(
+		CommandSourceStack sourceStack,
+		ResourceOrTagLocationArgument.Result<Structure> structureResult,
+		HolderSet<Structure> holderset
+	) {
 		BlockPos originPos = new BlockPos(sourceStack.getPosition());
 		AsyncLocator.locate(sourceStack.getLevel(), holderset, originPos, 100, false)
 			.thenOnServerThread(pair -> {
 				if (pair != null) {
 					AsyncLocatorMod.logInfo("Location found - sending success back to command source");
-					LocateCommand.showLocateResult(sourceStack, argResult, originPos, pair, "commands.locate.success");
+					LocateCommand.showLocateResult(
+						sourceStack,
+						structureResult,
+						originPos,
+						pair,
+						"commands.locate.structure.success",
+						false
+					);
 				} else {
 					AsyncLocatorMod.logInfo("No location found - sending failure back to command source");
-					sourceStack.sendFailure(
-						new TextComponent(
-							LocateCommandAccess.getErrorFailed().create(argResult.asPrintable()).getMessage()
-						)
-					);
+					sourceStack.sendFailure(Component.literal(
+						LocateCommandAccess.getErrorFailed().create(structureResult.asPrintable()).getMessage()
+					));
 				}
 			});
 	}
