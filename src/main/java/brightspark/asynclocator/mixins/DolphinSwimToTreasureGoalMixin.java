@@ -2,6 +2,7 @@ package brightspark.asynclocator.mixins;
 
 import brightspark.asynclocator.AsyncLocator;
 import brightspark.asynclocator.AsyncLocator.LocateTask;
+import brightspark.asynclocator.AsyncLocatorConfig;
 import brightspark.asynclocator.AsyncLocatorMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -41,6 +42,8 @@ public class DolphinSwimToTreasureGoalMixin {
 		locals = LocalCapture.CAPTURE_FAILSOFT
 	)
 	public void findTreasureAsync(CallbackInfo ci, ServerLevel level, BlockPos blockpos) {
+		if (!AsyncLocatorConfig.DOLPHIN_TREASURE_ENABLED.get()) return;
+
 		AsyncLocatorMod.logDebug("Intercepted DolphinSwimToTreasureGoal#start call");
 		handleFindTreasureAsync(level, blockpos);
 		ci.cancel();

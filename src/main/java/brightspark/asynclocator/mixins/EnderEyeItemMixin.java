@@ -1,5 +1,6 @@
 package brightspark.asynclocator.mixins;
 
+import brightspark.asynclocator.AsyncLocatorConfig;
 import brightspark.asynclocator.AsyncLocatorMod;
 import brightspark.asynclocator.logic.EnderEyeItemLogic;
 import net.minecraft.advancements.critereon.UsedEnderEyeTrigger;
@@ -44,8 +45,13 @@ public class EnderEyeItemMixin {
 		int pRadius,
 		boolean pSkipExistingChunks
 	) {
-		AsyncLocatorMod.logDebug("Intercepted EnderEyeItem#use call");
-		return BlockPos.ZERO;
+		if (AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get()) {
+			AsyncLocatorMod.logDebug("Intercepted EnderEyeItem#use call");
+			return BlockPos.ZERO;
+		} else {
+			// Normal behaviour
+			return serverlevel.findNearestMapStructure(pStructureTag, pPos, pRadius, pSkipExistingChunks);
+		}
 	}
 
 	// Start the async locate task here so we have the eye of ender entity for context
@@ -68,6 +74,7 @@ public class EnderEyeItemMixin {
 		BlockPos blockpos,
 		EyeOfEnder eyeofender
 	) {
+		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get()) return;
 		EnderEyeItemLogic.locateAsync(serverlevel, pPlayer, eyeofender, (EnderEyeItem) (Object) this);
 	}
 
