@@ -86,7 +86,9 @@ public class EnderEyeItemMixin {
 		)
 	)
 	public void eyeOfEnderSignalTo(EyeOfEnder eyeOfEnder, BlockPos blockpos) {
-		// Do nothing - we'll do this later if a location is found
+		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get())
+			eyeOfEnder.signalTo(blockpos);
+		// Else do nothing - we'll do this later if a location is found
 	}
 
 	@Redirect(
@@ -97,7 +99,9 @@ public class EnderEyeItemMixin {
 		)
 	)
 	public void triggerUsedEnderEyeCriteria(UsedEnderEyeTrigger trigger, ServerPlayer player, BlockPos pos) {
-		// Do nothing - we'll do this later if a location is found
+		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get())
+			trigger.trigger(player, pos);
+		// Else do nothing - we'll do this later if a location is found
 	}
 
 	@Redirect(
@@ -107,7 +111,9 @@ public class EnderEyeItemMixin {
 			target = "Lnet/minecraft/world/entity/player/Player;awardStat(Lnet/minecraft/stats/Stat;)V"
 		)
 	)
-	public void playerAwardStat(Player instance, Stat<?> pStat) {
-		// Do nothing - we'll do this later if a location is found
+	public void playerAwardStat(Player player, Stat<?> pStat) {
+		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get())
+			player.awardStat(pStat);
+		// Else do nothing - we'll do this later if a location is found
 	}
 }
