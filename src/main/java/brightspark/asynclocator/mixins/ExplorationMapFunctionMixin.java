@@ -1,5 +1,6 @@
 package brightspark.asynclocator.mixins;
 
+import brightspark.asynclocator.AsyncLocatorConfig;
 import brightspark.asynclocator.AsyncLocatorMod;
 import brightspark.asynclocator.logic.ExplorationMapFunctionLogic;
 import net.minecraft.core.BlockPos;
@@ -57,6 +58,8 @@ public class ExplorationMapFunctionMixin {
 		Vec3 vec3,
 		ServerLevel serverlevel
 	) {
+		if (!AsyncLocatorConfig.EXPLORATION_MAP_ENABLED.get()) return;
+
 		AsyncLocatorMod.logDebug("Intercepted ExplorationMapFunction#run call");
 		ItemStack mapStack = ExplorationMapFunctionLogic.updateMapAsync(
 			serverlevel, new BlockPos(vec3), zoom, searchRadius, skipKnownStructures, mapDecoration, destination
