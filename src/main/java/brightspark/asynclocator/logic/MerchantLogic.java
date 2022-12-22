@@ -31,7 +31,7 @@ public class MerchantLogic {
 	}
 
 	public static void invalidateMap(AbstractVillager merchant, ItemStack mapStack) {
-		mapStack.setHoverName(Component.translatable("asynclocator.map.none"));
+		mapStack.setHoverName(Component.translatable("item.minecraft.map"));
 		merchant.getOffers()
 			.stream()
 			.filter(offer -> offer.getResult() == mapStack)

@@ -24,7 +24,7 @@ public class CommonLogic {
 	 */
 	public static ItemStack createEmptyMap() {
 		ItemStack stack = new ItemStack(Items.FILLED_MAP);
-		stack.setHoverName(Component.translatable("asynclocator.map.locating"));
+		stack.setHoverName(Component.translatable("menu.working"));
 		return stack;
 	}
 
