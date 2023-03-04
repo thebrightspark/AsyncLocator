@@ -60,7 +60,7 @@ public class TreasureMapForEmeraldsMixin {
 		RandomSource pRandom,
 		CallbackInfoReturnable<MerchantOffer> callbackInfo
 	) {
-		if (!AsyncLocatorConfig.VILLAGER_TRADE_ENABLED.get()) return;
+		if (!AsyncLocatorConfig.VILLAGER_TRADE_ENABLED) return;
 
 		AsyncLocatorMod.logDebug("Intercepted TreasureMapForEmeralds#getOffer call");
 		MerchantOffer offer = MerchantLogic.updateMapAsync(

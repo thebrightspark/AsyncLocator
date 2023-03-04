@@ -1,0 +1,5 @@
+{
+  "the_bumblezone.midnightconfig.title": "Async Locator's Configs",
+  "the_bumblezone.midnightconfig.LOCATOR_THREADS_COMMENT": "The maximum number of threads in the async locator thread pool.\nThere's no upper bound to this, however this should only be increased if you're experiencing\nsimultaneous location lookups causing issues AND you have the hardware capable of handling\nthe extra possible threads.\nThe default of 1 should be suitable for most users.",
+  "the_bumblezone.midnightconfig.LOCATOR_THREADS": "Locator Threads"
+}

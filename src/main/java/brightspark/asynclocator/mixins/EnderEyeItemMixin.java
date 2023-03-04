@@ -45,7 +45,7 @@ public class EnderEyeItemMixin {
 		int pRadius,
 		boolean pSkipExistingChunks
 	) {
-		if (AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get()) {
+		if (AsyncLocatorConfig.EYE_OF_ENDER_ENABLED) {
 			AsyncLocatorMod.logDebug("Intercepted EnderEyeItem#use call");
 			return BlockPos.ZERO;
 		} else {
@@ -74,7 +74,7 @@ public class EnderEyeItemMixin {
 		BlockPos blockpos,
 		EyeOfEnder eyeofender
 	) {
-		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get()) return;
+		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED) return;
 		EnderEyeItemLogic.locateAsync(serverlevel, pPlayer, eyeofender, (EnderEyeItem) (Object) this);
 	}
 
@@ -86,7 +86,7 @@ public class EnderEyeItemMixin {
 		)
 	)
 	public void eyeOfEnderSignalTo(EyeOfEnder eyeOfEnder, BlockPos blockpos) {
-		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get())
+		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED)
 			eyeOfEnder.signalTo(blockpos);
 		// Else do nothing - we'll do this later if a location is found
 	}
@@ -99,7 +99,7 @@ public class EnderEyeItemMixin {
 		)
 	)
 	public void triggerUsedEnderEyeCriteria(UsedEnderEyeTrigger trigger, ServerPlayer player, BlockPos pos) {
-		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get())
+		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED)
 			trigger.trigger(player, pos);
 		// Else do nothing - we'll do this later if a location is found
 	}
@@ -112,7 +112,7 @@ public class EnderEyeItemMixin {
 		)
 	)
 	public void playerAwardStat(Player player, Stat<?> pStat) {
-		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get())
+		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED)
 			player.awardStat(pStat);
 		// Else do nothing - we'll do this later if a location is found
 	}

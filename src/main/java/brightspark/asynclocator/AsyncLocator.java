@@ -1,6 +1,8 @@
 package brightspark.asynclocator;
 
 import com.mojang.datafixers.util.Pair;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -9,9 +11,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
-import net.minecraftforge.event.server.ServerStoppingEvent;
-import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
@@ -24,39 +23,31 @@ public class AsyncLocator {
 
 	private AsyncLocator() {}
 
-	private static void setupExecutorService() {
+	static void setupExecutorService() {
 		shutdownExecutorService();
 
-		int threads = AsyncLocatorConfig.LOCATOR_THREADS.get();
+		int threads = AsyncLocatorConfig.LOCATOR_THREADS;
 		AsyncLocatorMod.logInfo("Starting locating executor service with thread pool size of {}", threads);
 		LOCATING_EXECUTOR_SERVICE = Executors.newFixedThreadPool(
-			threads,
-			new ThreadFactory() {
-				private static final AtomicInteger poolNum = new AtomicInteger(1);
-				private final AtomicInteger threadNum = new AtomicInteger(1);
-				private final String namePrefix = "asynclocator-" + poolNum.getAndIncrement() + "-thread-";
+				threads,
+				new ThreadFactory() {
+					private static final AtomicInteger poolNum = new AtomicInteger(1);
+					private final AtomicInteger threadNum = new AtomicInteger(1);
+					private final String namePrefix = "asynclocator-" + poolNum.getAndIncrement() + "-thread-";
 
-				@Override
-				public Thread newThread(@NotNull Runnable r) {
-					return new Thread(SidedThreadGroups.SERVER, r, namePrefix + threadNum.getAndIncrement());
+					@Override
+					public Thread newThread(@NotNull Runnable r) {
+						return new Thread(r, namePrefix + threadNum.getAndIncrement());
+					}
 				}
-			}
 		);
 	}
 
-	private static void shutdownExecutorService() {
+	static void shutdownExecutorService() {
 		if (LOCATING_EXECUTOR_SERVICE != null) {
 			AsyncLocatorMod.logInfo("Shutting down locating executor service");
 			LOCATING_EXECUTOR_SERVICE.shutdown();
 		}
-	}
-
-	static void handleServerAboutToStartEvent(ServerAboutToStartEvent ignoredEvent) {
-		setupExecutorService();
-	}
-
-	static void handleServerStoppingEvent(ServerStoppingEvent ignoredEvent) {
-		shutdownExecutorService();
 	}
 
 	/**

@@ -42,7 +42,7 @@ public class DolphinSwimToTreasureGoalMixin {
 		locals = LocalCapture.CAPTURE_FAILSOFT
 	)
 	public void findTreasureAsync(CallbackInfo ci, ServerLevel level, BlockPos blockpos) {
-		if (!AsyncLocatorConfig.DOLPHIN_TREASURE_ENABLED.get()) return;
+		if (!AsyncLocatorConfig.DOLPHIN_TREASURE_ENABLED) return;
 
 		AsyncLocatorMod.logDebug("Intercepted DolphinSwimToTreasureGoal#start call");
 		handleFindTreasureAsync(level, blockpos);

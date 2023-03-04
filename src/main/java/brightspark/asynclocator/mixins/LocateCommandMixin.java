@@ -36,7 +36,7 @@ public class LocateCommandMixin {
 		Registry<Structure> registry,
 		HolderSet<Structure> holderset
 	) {
-		if (!AsyncLocatorConfig.LOCATE_COMMAND_ENABLED.get()) return;
+		if (!AsyncLocatorConfig.LOCATE_COMMAND_ENABLED) return;
 
 		CommandSource source = ((CommandSourceStackAccess) sourceStack).getSource();
 		if (source instanceof ServerPlayer || source instanceof MinecraftServer) {

@@ -43,7 +43,7 @@ public class MerchantLogic {
 	}
 
 	public static void removeOffer(AbstractVillager merchant, MerchantOffer offer) {
-		if (AsyncLocatorConfig.REMOVE_OFFER.get()) {
+		if (AsyncLocatorConfig.REMOVE_OFFER) {
 			if (merchant.getOffers().remove(offer)) AsyncLocatorMod.logInfo("Removed merchant map offer");
 			else AsyncLocatorMod.logWarn("Failed to remove merchant map offer");
 		} else {

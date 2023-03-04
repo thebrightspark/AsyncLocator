@@ -58,12 +58,12 @@ public class ExplorationMapFunctionMixin {
 		Vec3 vec3,
 		ServerLevel serverlevel
 	) {
-		if (!AsyncLocatorConfig.EXPLORATION_MAP_ENABLED.get()) return;
-
-		AsyncLocatorMod.logDebug("Intercepted ExplorationMapFunction#run call");
-		ItemStack mapStack = ExplorationMapFunctionLogic.updateMapAsync(
-			serverlevel, new BlockPos(vec3), zoom, searchRadius, skipKnownStructures, mapDecoration, destination
-		);
-		cir.setReturnValue(mapStack);
+//		if (!AsyncLocatorConfig.EXPLORATION_MAP_ENABLED) return;
+//
+//		AsyncLocatorMod.logDebug("Intercepted ExplorationMapFunction#run call");
+//		ItemStack mapStack = ExplorationMapFunctionLogic.updateMapAsync(
+//			serverlevel, new BlockPos(vec3), zoom, searchRadius, skipKnownStructures, mapDecoration, destination
+//		);
+//		cir.setReturnValue(mapStack);
 	}
 }

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "asynclocator",
+  "version": "$version",
+
+  "name": "Async Locator",
+  "description": "Making structure locating asynchronous",
+  "authors": [
+    "BrightSpark"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/async-locator",
+    "sources": "https://github.com/thebrightspark/AsyncLocator",
+    "issues": "https://github.com/thebrightspark/AsyncLocator/issues"
+  },
+
+  "license": "MIT License",
+  "icon": "assets/asynclocator/logo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "brightspark.asynclocator.AsyncLocatorMod"
+    ]
+  },
+  "mixins": [
+    "asynclocator.mixins.json"
+  ],
+
+  "accessWidener" : "asynclocator.accesswidener",
+
+  "depends": {
+    "fabricloader": ">=0.14.12",
+    "minecraft": "1.19.2",
+    "fabric": ">=0.70.0",
+    "midnightlib": ">=0.5.2"
+  }
+}
