@@ -42,7 +42,7 @@ public class AsyncLocator {
 
 				@Override
 				public Thread newThread(@NotNull Runnable r) {
-					return new Thread(SidedThreadGroups.SERVER, r, namePrefix + threadNum.getAndIncrement());
+					return new Thread(r, namePrefix + threadNum.getAndIncrement());
 				}
 			}
 		);
