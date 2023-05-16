@@ -1,5 +1,7 @@
 package brightspark.asynclocator.logic;
 
+import java.util.function.BiConsumer;
+
 import brightspark.asynclocator.AsyncLocator;
 import brightspark.asynclocator.AsyncLocatorMod;
 import net.minecraft.core.BlockPos;
@@ -11,11 +13,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-
-import java.util.function.BiConsumer;
 
 // TODO: Need to test this
 public class ExplorationMapFunctionLogic {

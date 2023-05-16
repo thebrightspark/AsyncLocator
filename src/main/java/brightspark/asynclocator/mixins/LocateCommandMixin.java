@@ -1,22 +1,22 @@
 package brightspark.asynclocator.mixins;
 
-import brightspark.asynclocator.AsyncLocatorConfig;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
 import brightspark.asynclocator.AsyncLocatorMod;
 import brightspark.asynclocator.logic.LocateCommandLogic;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
+import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.commands.LocateCommand;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(LocateCommand.class)
 public class LocateCommandMixin {
@@ -31,12 +31,12 @@ public class LocateCommandMixin {
 	)
 	private static void findLocationAsync(
 		CommandSourceStack sourceStack,
-		ResourceOrTagLocationArgument.Result<Structure> structureResult,
+		ResourceOrTagKeyArgument.Result<Structure> structureResult,
 		CallbackInfoReturnable<Integer> cir,
 		Registry<Structure> registry,
 		HolderSet<Structure> holderset
 	) {
-		if (!AsyncLocatorConfig.LOCATE_COMMAND_ENABLED.get()) return;
+		if (!AsyncLocatorMod.CONFIGURATION.enableLocateCommand()) return;
 
 		CommandSource source = ((CommandSourceStackAccess) sourceStack).getSource();
 		if (source instanceof ServerPlayer || source instanceof MinecraftServer) {

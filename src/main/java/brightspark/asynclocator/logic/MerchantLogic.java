@@ -1,7 +1,6 @@
 package brightspark.asynclocator.logic;
 
 import brightspark.asynclocator.AsyncLocator;
-import brightspark.asynclocator.AsyncLocatorConfig;
 import brightspark.asynclocator.AsyncLocatorMod;
 import brightspark.asynclocator.mixins.MerchantOfferAccess;
 import net.minecraft.core.BlockPos;
@@ -43,7 +42,7 @@ public class MerchantLogic {
 	}
 
 	public static void removeOffer(AbstractVillager merchant, MerchantOffer offer) {
-		if (AsyncLocatorConfig.REMOVE_OFFER.get()) {
+		if (!AsyncLocatorMod.CONFIGURATION.enableVillagerTrade()) {
 			if (merchant.getOffers().remove(offer)) AsyncLocatorMod.logInfo("Removed merchant map offer");
 			else AsyncLocatorMod.logWarn("Failed to remove merchant map offer");
 		} else {

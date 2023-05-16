@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "asynclocator",
+	"version": "${version}",
+  "name": "Async Locator",
+  "description": "Changes the searching of features to be asynchronous to mitigate associated lag",
+  "authors": [
+    "bright_spark",
+    "azuredoom"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/async-locator",
+    "sources": "https://github.com/thebrightspark/AsyncLocator",
+    "issues": "https://github.com/thebrightspark/AsyncLocator/issues"
+  },
+  "license": "MIT",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "brightspark.asynclocator.AsyncLocatorMod"
+    ],
+    "server": [
+      "brightspark.asynclocator.AsyncLocatorServerMod"
+    ]
+  },
+  "mixins": [
+    "asynclocator.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric": "*",
+    "minecraft": "1.19.4",
+    "java": ">=17"
+  }
+}

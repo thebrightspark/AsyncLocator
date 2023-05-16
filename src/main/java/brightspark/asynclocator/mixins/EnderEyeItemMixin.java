@@ -1,6 +1,12 @@
 package brightspark.asynclocator.mixins;
 
-import brightspark.asynclocator.AsyncLocatorConfig;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
 import brightspark.asynclocator.AsyncLocatorMod;
 import brightspark.asynclocator.logic.EnderEyeItemLogic;
 import net.minecraft.advancements.critereon.UsedEnderEyeTrigger;
@@ -18,12 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.HitResult;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(EnderEyeItem.class)
 public class EnderEyeItemMixin {
@@ -45,7 +45,7 @@ public class EnderEyeItemMixin {
 		int pRadius,
 		boolean pSkipExistingChunks
 	) {
-		if (AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get()) {
+		if (AsyncLocatorMod.CONFIGURATION.enableEyeofEnder()) {
 			AsyncLocatorMod.logDebug("Intercepted EnderEyeItem#use call");
 			return BlockPos.ZERO;
 		} else {
@@ -74,7 +74,7 @@ public class EnderEyeItemMixin {
 		BlockPos blockpos,
 		EyeOfEnder eyeofender
 	) {
-		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get()) return;
+		if (!AsyncLocatorMod.CONFIGURATION.enableEyeofEnder()) return;
 		EnderEyeItemLogic.locateAsync(serverlevel, pPlayer, eyeofender, (EnderEyeItem) (Object) this);
 	}
 
@@ -86,7 +86,7 @@ public class EnderEyeItemMixin {
 		)
 	)
 	public void eyeOfEnderSignalTo(EyeOfEnder eyeOfEnder, BlockPos blockpos) {
-		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get())
+		if (!AsyncLocatorMod.CONFIGURATION.enableEyeofEnder())
 			eyeOfEnder.signalTo(blockpos);
 		// Else do nothing - we'll do this later if a location is found
 	}
@@ -99,7 +99,7 @@ public class EnderEyeItemMixin {
 		)
 	)
 	public void triggerUsedEnderEyeCriteria(UsedEnderEyeTrigger trigger, ServerPlayer player, BlockPos pos) {
-		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get())
+		if (!AsyncLocatorMod.CONFIGURATION.enableEyeofEnder())
 			trigger.trigger(player, pos);
 		// Else do nothing - we'll do this later if a location is found
 	}
@@ -112,7 +112,7 @@ public class EnderEyeItemMixin {
 		)
 	)
 	public void playerAwardStat(Player player, Stat<?> pStat) {
-		if (!AsyncLocatorConfig.EYE_OF_ENDER_ENABLED.get())
+		if (!AsyncLocatorMod.CONFIGURATION.enableEyeofEnder())
 			player.awardStat(pStat);
 		// Else do nothing - we'll do this later if a location is found
 	}

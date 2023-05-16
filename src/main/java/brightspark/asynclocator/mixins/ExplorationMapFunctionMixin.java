@@ -1,6 +1,13 @@
 package brightspark.asynclocator.mixins;
 
-import brightspark.asynclocator.AsyncLocatorConfig;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
 import brightspark.asynclocator.AsyncLocatorMod;
 import brightspark.asynclocator.logic.ExplorationMapFunctionLogic;
 import net.minecraft.core.BlockPos;
@@ -12,13 +19,6 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(ExplorationMapFunction.class)
 public class ExplorationMapFunctionMixin {
@@ -58,11 +58,11 @@ public class ExplorationMapFunctionMixin {
 		Vec3 vec3,
 		ServerLevel serverlevel
 	) {
-		if (!AsyncLocatorConfig.EXPLORATION_MAP_ENABLED.get()) return;
+		if (!AsyncLocatorMod.CONFIGURATION.enableExplorationMap()) return;
 
 		AsyncLocatorMod.logDebug("Intercepted ExplorationMapFunction#run call");
 		ItemStack mapStack = ExplorationMapFunctionLogic.updateMapAsync(
-			serverlevel, new BlockPos(vec3), zoom, searchRadius, skipKnownStructures, mapDecoration, destination
+			serverlevel, BlockPos.containing(vec3), zoom, searchRadius, skipKnownStructures, mapDecoration, destination
 		);
 		cir.setReturnValue(mapStack);
 	}

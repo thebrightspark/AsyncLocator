@@ -1,6 +1,19 @@
 package brightspark.asynclocator;
 
+import java.text.NumberFormat;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -9,25 +22,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
-import net.minecraftforge.event.server.ServerStoppingEvent;
-import net.minecraftforge.fml.util.thread.SidedThreadGroups;
-import org.jetbrains.annotations.NotNull;
-
-import java.text.NumberFormat;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 public class AsyncLocator {
 	private static ExecutorService LOCATING_EXECUTOR_SERVICE = null;
 
 	private AsyncLocator() {}
 
-	private static void setupExecutorService() {
-		shutdownExecutorService();
+	public static void setupExecutorService(MinecraftServer minecraftServer) {
+		shutdownExecutorService(minecraftServer);
 
-		int threads = AsyncLocatorConfig.LOCATOR_THREADS.get();
+		int threads = AsyncLocatorMod.CONFIGURATION.locatorThreads();
 		AsyncLocatorMod.logInfo("Starting locating executor service with thread pool size of {}", threads);
 		LOCATING_EXECUTOR_SERVICE = Executors.newFixedThreadPool(
 			threads,
@@ -44,19 +48,11 @@ public class AsyncLocator {
 		);
 	}
 
-	private static void shutdownExecutorService() {
+	public static void shutdownExecutorService(MinecraftServer minecraftServer) {
 		if (LOCATING_EXECUTOR_SERVICE != null) {
 			AsyncLocatorMod.logInfo("Shutting down locating executor service");
 			LOCATING_EXECUTOR_SERVICE.shutdown();
 		}
-	}
-
-	static void handleServerAboutToStartEvent(ServerAboutToStartEvent ignoredEvent) {
-		setupExecutorService();
-	}
-
-	static void handleServerStoppingEvent(ServerStoppingEvent ignoredEvent) {
-		shutdownExecutorService();
 	}
 
 	/**

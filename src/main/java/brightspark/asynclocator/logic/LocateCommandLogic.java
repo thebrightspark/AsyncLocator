@@ -1,10 +1,13 @@
 package brightspark.asynclocator.logic;
 
+import com.google.common.base.Stopwatch;
+
 import brightspark.asynclocator.AsyncLocator;
 import brightspark.asynclocator.AsyncLocatorMod;
 import brightspark.asynclocator.mixins.LocateCommandAccess;
+import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
+import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
@@ -16,10 +19,11 @@ public class LocateCommandLogic {
 
 	public static void locateAsync(
 		CommandSourceStack sourceStack,
-		ResourceOrTagLocationArgument.Result<Structure> structureResult,
+		ResourceOrTagKeyArgument.Result<Structure> structureResult,
 		HolderSet<Structure> holderset
 	) {
-		BlockPos originPos = new BlockPos(sourceStack.getPosition());
+		BlockPos originPos = BlockPos.containing(sourceStack.getPosition());
+        Stopwatch stopwatch = Stopwatch.createStarted(Util.TICKER);
 		AsyncLocator.locate(sourceStack.getLevel(), holderset, originPos, 100, false)
 			.thenOnServerThread(pair -> {
 				if (pair != null) {
@@ -30,7 +34,7 @@ public class LocateCommandLogic {
 						originPos,
 						pair,
 						"commands.locate.structure.success",
-						false
+						false, stopwatch.elapsed()
 					);
 				} else {
 					AsyncLocatorMod.logInfo("No location found - sending failure back to command source");
