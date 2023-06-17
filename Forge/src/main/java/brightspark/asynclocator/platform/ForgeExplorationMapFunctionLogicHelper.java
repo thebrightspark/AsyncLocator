@@ -4,6 +4,7 @@ import brightspark.asynclocator.ALConstants;
 import brightspark.asynclocator.logic.CommonLogic;
 import brightspark.asynclocator.platform.services.ExplorationMapFunctionLogicHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,9 +37,10 @@ public class ForgeExplorationMapFunctionLogicHelper implements ExplorationMapFun
 		BlockPos pos,
 		int scale,
 		MapDecoration.Type destinationType,
-		BlockPos invPos
+		BlockPos invPos,
+		Component displayName
 	) {
-		CommonLogic.updateMap(mapStack, level, pos, scale, destinationType);
+		CommonLogic.updateMap(mapStack, level, pos, scale, destinationType, displayName);
 		// Shouldn't need to set the stack in its slot again, as we're modifying the same instance
 		handleUpdateMapInChest(mapStack, level, invPos, (handler, slot) -> {});
 	}

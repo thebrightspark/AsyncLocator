@@ -3,6 +3,8 @@ package brightspark.asynclocator.logic;
 import brightspark.asynclocator.mixins.MapItemAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -15,6 +17,8 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 
 public class CommonLogic {
+	private static final String MAP_HOVER_NAME_KEY = "menu.working";
+
 	private CommonLogic() {}
 
 	/**
@@ -24,8 +28,22 @@ public class CommonLogic {
 	 */
 	public static ItemStack createEmptyMap() {
 		ItemStack stack = new ItemStack(Items.FILLED_MAP);
-		stack.setHoverName(Component.translatable("menu.working"));
+		stack.setHoverName(Component.translatable(MAP_HOVER_NAME_KEY));
 		return stack;
+	}
+
+	/**
+	 * Returns true if the stack is an empty FILLED_MAP item with the hover tooltip name stating that it's locating a
+	 * feature.
+	 *
+	 * @param stack The stack to check.
+	 * @return True if the stack is an empty FILLED_MAP awaiting to be populated with location data.
+	 */
+	public static boolean isEmptyPendingMap(ItemStack stack) {
+		if (!stack.is(Items.FILLED_MAP) || !stack.hasCustomHoverName()) return false;
+		ComponentContents hoverName = stack.getHoverName().getContents();
+		if (!(hoverName instanceof TranslatableContents)) return false;
+		return ((TranslatableContents) hoverName).getKey().equals(MAP_HOVER_NAME_KEY);
 	}
 
 	/**
@@ -44,7 +62,7 @@ public class CommonLogic {
 		int scale,
 		MapDecoration.Type destinationType
 	) {
-		updateMap(mapStack, level, pos, scale, destinationType, null);
+		updateMap(mapStack, level, pos, scale, destinationType, (Component) null);
 	}
 
 	/**
@@ -65,13 +83,34 @@ public class CommonLogic {
 		MapDecoration.Type destinationType,
 		String displayName
 	) {
+		updateMap(mapStack, level, pos, scale, destinationType, Component.translatable(displayName));
+	}
+
+	/**
+	 * Updates the map stack with all the given data.
+	 *
+	 * @param mapStack        The map ItemStack to update
+	 * @param level           The ServerLevel
+	 * @param pos             The feature position
+	 * @param scale           The map scale
+	 * @param destinationType The map feature type
+	 * @param displayName     The hover tooltip display name of the ItemStack
+	 */
+	public static void updateMap(
+		ItemStack mapStack,
+		ServerLevel level,
+		BlockPos pos,
+		int scale,
+		MapDecoration.Type destinationType,
+		Component displayName
+	) {
 		MapItemAccess.callCreateAndStoreSavedData(
 			mapStack, level, pos.getX(), pos.getZ(), scale, true, true, level.dimension()
 		);
 		MapItem.renderBiomePreviewMap(level, mapStack);
 		MapItemSavedData.addTargetDecoration(mapStack, pos, "+", destinationType);
 		if (displayName != null)
-			mapStack.setHoverName(Component.translatable(displayName));
+			mapStack.setHoverName(displayName);
 	}
 
 	/**

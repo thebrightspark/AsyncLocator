@@ -42,7 +42,6 @@ public class ExplorationMapFunctionMixin {
 	@Final
 	boolean skipKnownStructures;
 
-	// TODO: Need to also mixin SetNameFunction#run to not name the map item immediately
 	@Inject(
 		method = "run",
 		at = @At(
