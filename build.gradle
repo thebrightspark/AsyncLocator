@@ -2,8 +2,6 @@ subprojects {
     apply plugin: 'java'
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-    java.withSourcesJar()
-    java.withJavadocJar()
 
     jar {
         from(rootProject.file("LICENSE")) {
@@ -22,12 +20,6 @@ subprojects {
                     'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
                     'Built-On-Minecraft'      : minecraft_version
             ])
-        }
-    }
-
-    sourcesJar {
-        from(rootProject.file("LICENSE")) {
-            rename { "${it}_${mod_name}" }
         }
     }
 
