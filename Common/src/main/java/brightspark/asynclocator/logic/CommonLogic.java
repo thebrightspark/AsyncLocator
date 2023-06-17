@@ -2,9 +2,8 @@ package brightspark.asynclocator.logic;
 
 import brightspark.asynclocator.mixins.MapItemAccess;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.ByteTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -18,6 +17,7 @@ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 
 public class CommonLogic {
 	private static final String MAP_HOVER_NAME_KEY = "menu.working";
+	private static final String KEY_LOCATING = "asynclocator.locating";
 
 	private CommonLogic() {}
 
@@ -29,6 +29,7 @@ public class CommonLogic {
 	public static ItemStack createEmptyMap() {
 		ItemStack stack = new ItemStack(Items.FILLED_MAP);
 		stack.setHoverName(Component.translatable(MAP_HOVER_NAME_KEY));
+		stack.addTagElement(KEY_LOCATING, ByteTag.ONE);
 		return stack;
 	}
 
@@ -39,11 +40,9 @@ public class CommonLogic {
 	 * @param stack The stack to check.
 	 * @return True if the stack is an empty FILLED_MAP awaiting to be populated with location data.
 	 */
+	@SuppressWarnings("DataFlowIssue")
 	public static boolean isEmptyPendingMap(ItemStack stack) {
-		if (!stack.is(Items.FILLED_MAP) || !stack.hasCustomHoverName()) return false;
-		ComponentContents hoverName = stack.getHoverName().getContents();
-		if (!(hoverName instanceof TranslatableContents)) return false;
-		return ((TranslatableContents) hoverName).getKey().equals(MAP_HOVER_NAME_KEY);
+		return stack.is(Items.FILLED_MAP) && stack.hasTag() && stack.getTag().contains(KEY_LOCATING);
 	}
 
 	/**
@@ -111,6 +110,7 @@ public class CommonLogic {
 		MapItemSavedData.addTargetDecoration(mapStack, pos, "+", destinationType);
 		if (displayName != null)
 			mapStack.setHoverName(displayName);
+		mapStack.removeTagKey(KEY_LOCATING);
 	}
 
 	/**

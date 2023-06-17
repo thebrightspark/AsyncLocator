@@ -15,6 +15,7 @@
 		"MapItemAccess",
 		"MerchantOfferAccess",
 		"SetNameFunctionMixin",
+		"SlotMixin",
 		"TreasureMapForEmeraldsMixin"
 	],
 	"client": [],
