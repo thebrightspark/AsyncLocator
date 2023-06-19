@@ -5,7 +5,7 @@ import brightspark.asynclocator.logic.LocateCommandLogic;
 import brightspark.asynclocator.platform.Services;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
+import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.server.MinecraftServer;
@@ -31,7 +31,7 @@ public class LocateCommandMixin {
 	)
 	private static void findLocationAsync(
 		CommandSourceStack sourceStack,
-		ResourceOrTagLocationArgument.Result<Structure> structureResult,
+		ResourceOrTagKeyArgument.Result<Structure> structureResult,
 		CallbackInfoReturnable<Integer> cir,
 		Registry<Structure> registry,
 		HolderSet<Structure> holderset
