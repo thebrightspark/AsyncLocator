@@ -21,7 +21,7 @@ public class LocateCommandLogic {
 		ResourceOrTagKeyArgument.Result<Structure> structureResult,
 		HolderSet<Structure> holderset
 	) {
-		BlockPos originPos = new BlockPos(sourceStack.getPosition());
+		BlockPos originPos = BlockPos.containing(sourceStack.getPosition());
 		Stopwatch stopwatch = Stopwatch.createStarted(Util.TICKER);
 		AsyncLocator.locate(sourceStack.getLevel(), holderset, originPos, 100, false)
 			.thenOnServerThread(pair -> {

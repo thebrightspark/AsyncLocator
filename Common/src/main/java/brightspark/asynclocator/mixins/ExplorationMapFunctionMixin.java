@@ -62,7 +62,7 @@ public class ExplorationMapFunctionMixin {
 
 		ALConstants.logDebug("Intercepted ExplorationMapFunction#run call");
 		ItemStack mapStack = ExplorationMapFunctionLogic.updateMapAsync(
-			serverlevel, new BlockPos(vec3), zoom, searchRadius, skipKnownStructures, mapDecoration, destination
+			serverlevel, BlockPos.containing(vec3), zoom, searchRadius, skipKnownStructures, mapDecoration, destination
 		);
 		cir.setReturnValue(mapStack);
 	}
