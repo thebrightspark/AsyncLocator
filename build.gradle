@@ -1,3 +1,10 @@
+plugins {
+    id 'fabric-loom' version '1.2-SNAPSHOT' apply(false)
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)' apply(false)
+    id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT' apply(false)
+    id("org.spongepowered.mixin") version "0.7-SNAPSHOT" apply(false)
+}
+
 subprojects {
     apply plugin: 'java'
 
@@ -24,16 +31,13 @@ subprojects {
     }
 
     repositories {
-
         mavenCentral()
-
         maven {
             name = 'Sponge / Mixin'
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
-
         maven {
-            name = 'BlameJared Maven (CrT / Bookshelf)'
+            name = 'BlameJared Maven (JEI / CraftTweaker / Bookshelf)'
             url = 'https://maven.blamejared.com'
         }
     }
@@ -43,10 +47,16 @@ subprojects {
         it.options.release = 17
     }
 
+    processResources {
+        filesMatching(['pack.mcmeta', 'fabric.mod.json', 'mods.toml', '*.mixins.json']) {
+            expand project.properties
+        }
+    }
+
     // Disables Gradle's custom module metadata from being published to maven. The
     // metadata includes mapped dependencies which are not reasonably consumable by
     // other mod developers.
-    tasks.withType(GenerateModuleMetadata) {
+    tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
 }
