@@ -1,0 +1,54 @@
+#https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
+
+name: Gradle Release Artifact
+
+on:
+  release:
+    types: [ created ]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mod-loader: [ Fabric, Forge ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: Extract versions from tag name
+        run: |
+          readarray -td "-" VERSIONS <<< "${GITHUB_REF#refs/tags/}-"
+          echo "minecraft-version=${VERSIONS[0]}" >> "$GITHUB_ENV"
+          echo "mod-version=${VERSIONS[1]}" >> "$GITHUB_ENV"
+
+      - name: Build ${{ matrix.mod-loader }}
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
+          arguments: ${{ matrix.mod-loader }}:build
+
+      - name: Publish ${{ matrix.mod-loader }}
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: rkN8aqci
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 625069
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          name: [ ${ { matrix.mod-loader } } ${ { env.minecraft-version } } ] ${{ env.mod-version }}
+          changelog-file: CHANGELOG.md
+          java: 17
+          files: |
+            ${{ matrix.mod-loader }}/build/libs/!(*-@(dev|sources|javadoc)).jar
+            ${{ matrix.mod-loader }}/build/libs/*-@(dev|sources|javadocs).jar
