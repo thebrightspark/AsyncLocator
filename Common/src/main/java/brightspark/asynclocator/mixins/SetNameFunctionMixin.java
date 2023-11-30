@@ -21,12 +21,12 @@ public class SetNameFunctionMixin {
 		)
 	)
 	public ItemStack deferSetName(ItemStack stack, Component name) {
-		if (Services.CONFIG.explorationMapEnabled()) {
+		if (Services.CONFIG.explorationMapEnabled() && CommonLogic.isEmptyPendingMap(stack)) {
 			ALConstants.logDebug("Intercepted SetNameFunction#run call");
-			if (CommonLogic.isEmptyPendingMap(stack))
-				ExplorationMapFunctionLogic.cacheName(stack, name);
-		} else
+			ExplorationMapFunctionLogic.cacheName(stack, name);
+		} else {
 			stack.setHoverName(name);
+		}
 		return stack;
 	}
 }
